@@ -1,0 +1,8 @@
+# Haskell build files
+*.exe
+*.hi
+*.o
+
+# IDEs
+.idea
+.vscode
