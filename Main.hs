@@ -7,5 +7,10 @@ module Main where
 
   type Stack = [Value]
 
+  data Instruction
+    = PUSH Value
+    | POP
+    | STORE String
+
   main :: IO ()
   main = print (String "test")
