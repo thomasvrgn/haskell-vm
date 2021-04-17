@@ -7,19 +7,21 @@ module Main where
     | Integer Integer
     deriving (Show)
 
-  type Page = [Value]
+  type Frame = [Value]
 
   type Address = Int
   type Pointer = (String, Address)
   type Symbols = [Pointer]
 
-  type Stack = [Page]
+  type Stack = [Frame]
   type Memory = (Symbols, Stack)
 
   data Instruction
     = PUSH Value
     | POP
     | STORE String
+
+  type Page = [Instruction]
 
   main :: IO ()
   main = print (String "test")
