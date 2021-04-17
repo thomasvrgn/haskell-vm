@@ -7,11 +7,13 @@ module Main where
     | Integer Integer
     deriving (Show)
 
-  type Stack = [Value]
+  type Page = [Value]
 
   type Address = Int
   type Pointer = (String, Address)
   type Symbols = [Pointer]
+
+  type Stack = [Page]
 
   data Instruction
     = PUSH Value
