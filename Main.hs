@@ -1,5 +1,7 @@
 {-# LANGUAGE BlockArguments #-}
 module Main where
+  import Control.Monad.State
+
   data Value
     = String String
     | Integer Integer
