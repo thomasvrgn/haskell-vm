@@ -7,6 +7,10 @@ module Main where
 
   type Stack = [Value]
 
+  type Address = Int
+  type Pointer = (String, Address)
+  type Symbols = [Pointer]
+
   data Instruction
     = PUSH Value
     | POP
