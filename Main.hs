@@ -14,6 +14,7 @@ module Main where
   type Symbols = [Pointer]
 
   type Stack = [Page]
+  type Memory = (Symbols, Stack)
 
   data Instruction
     = PUSH Value
