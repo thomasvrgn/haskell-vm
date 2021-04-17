@@ -1,4 +1,11 @@
 {-# LANGUAGE BlockArguments #-}
 module Main where
-  main :: IO()
-  main = print "Hello from VM"
+  data Value
+    = String String
+    | Integer Integer
+    deriving (Show)
+
+  type Stack = [Value]
+
+  main :: IO ()
+  main = print (String "test")
