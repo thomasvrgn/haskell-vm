@@ -28,3 +28,13 @@ module Types.Stack where
 
   remove :: String -> Symbols -> Symbols
   remove name = filter ((/=name) . fst)
+
+  -- Initializer functions
+  emptyStack :: Stack
+  emptyStack = []
+
+  emptySymbols :: Symbols
+  emptySymbols = []
+
+  emptyMemory :: Memory
+  emptyMemory = (emptyStack, emptySymbols)
