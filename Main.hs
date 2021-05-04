@@ -3,10 +3,17 @@ module Main where
   import Types.Value
   import Types.Stack
   import Types.Bytecode
+  import Control.Monad.State
+  
+  stackTests = do
+    (stack, symbols) <- get
+    push (Integer 7)
+    pop
+    push (String "test")
+    register ("test", 15)
+    remove "test"
 
   main :: IO()
   main = do
-    let (stack, symbols) = emptyMemory
-    print stack2
-    let stack2 = push (String "test") stack
-    print stack2
+    let res = runState (stackTests) emptyMemory
+    print res
