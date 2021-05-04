@@ -21,12 +21,12 @@ module Types.Stack where
 
   printMem :: Memory -> IO()
   printMem (stack, symbols) = do
-    putStrLn "Stack:"
+    if length stack > 0 then putStrLn "Stack:" else return ()
     mapM_ (\(index, name) -> putStrLn $ "  " ++ show index ++ ". " ++ case name of
       (String str) -> "String " ++ show str
       (Integer int) -> "Integer " ++ show int) (zip [0..] stack)
     
-    putStrLn "\nSymbols:"
+    if length symbols > 0 then putStrLn "\nSymbols:" else return ()
     mapM_ (\(index, (name, address)) -> do
       putStrLn $ "  " ++ show index ++ ". Name: " ++ name
       putStrLn $ "  " ++ (createTabulation . intLength $ index) ++ "  Address: " ++ show address
