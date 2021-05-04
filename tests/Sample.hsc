@@ -3,3 +3,5 @@ PUSH "test"
 STORE a
 LOAD a
 LOAD a
+PUSH "bruh"
+STORE i
