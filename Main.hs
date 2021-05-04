@@ -12,6 +12,7 @@ module Main where
   main :: IO()
   main = do
     content <- readFile "tests/Sample.hsc"
-    print (parse content)
-    let (ret, st) = runState (runBytecode [Push (String "test"), Store "a", Load "a", Load "a"]) emptyMemory
+    let bytecode = parse content
+    let (ret, st) = runState (runBytecode bytecode) emptyMemory
     printMem st
+    printBytecode bytecode
