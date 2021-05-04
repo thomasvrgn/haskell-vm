@@ -1,31 +1,17 @@
 {-# LANGUAGE BlockArguments #-}
 module Main where
-  import Types.Value
-  import Types.Stack
-  import Types.Bytecode
-  import Control.Monad.State
-  
-  runBytecode :: Bytecode -> State Memory ()
-  runBytecode [] = return ()
-  runBytecode (x:xs) = evalInstruction x
-    where 
-      evalInstruction (Push value) = do
-        push value
-        runBytecode xs
+  import Core.Interpreter
+  import Core.Parser
 
-      evalInstruction (Store name) = do
-        index <- stackLength
-        register (name, index)
-        runBytecode xs
-      
-      evalInstruction (Load name) = do
-        (_, index) <- getVariable name
-        (stack, _) <- get
-        push (stack !! index)
-        runBytecode xs
+  import Types.Bytecode
+  import Types.Stack
+  import Types.Value
+
+  import Control.Monad.State
 
   main :: IO()
   main = do
+    content <- readFile "tests/Sample.hsc"
+    print (parse content)
     let (ret, st) = runState (runBytecode [Push (String "test"), Store "a", Load "a", Load "a"]) emptyMemory
     printMem st
-    print "test"
