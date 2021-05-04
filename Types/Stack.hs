@@ -15,6 +15,9 @@ module Types.Stack where
   push :: Value -> State Memory ()
   push value = state \(stack, symbols) -> ((), (stack ++ [value], symbols))
 
+  peek :: State Memory Value
+  peek = state \memory@(stack, _) -> (last stack, memory)
+
   pop :: State Memory Value
   pop = state \(stack, symbols) -> (last stack, (init stack, symbols))
 
@@ -31,7 +34,9 @@ module Types.Stack where
     (getVariable symbols, (stack, removeVariable symbols))
     where getVariable = (!!0) . filter ((==name) . fst)
           removeVariable = filter ((/=name) . fst)
-    
+  
+  stackLength :: State Memory Int
+  stackLength = state \(stack, symbols) -> ((length stack) - 1, (stack, symbols))
 
   -- Initializer functions
   emptyStack :: Stack
@@ -42,4 +47,3 @@ module Types.Stack where
 
   emptyMemory :: Memory
   emptyMemory = (emptyStack, emptySymbols)
-  
