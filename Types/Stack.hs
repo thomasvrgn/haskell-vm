@@ -2,6 +2,7 @@
 module Types.Stack where
   import Types.Value
   import Control.Monad.State
+  import Data.List (find)
 
   type Stack = [Value]
 
@@ -10,7 +11,27 @@ module Types.Stack where
   type Symbols = [Symbol]
 
   type Memory = (Stack, Symbols)
-  
+
+  intLength :: Show a => a -> Int
+  intLength = length . show
+
+  -- Memory methods
+  createTabulation :: Int -> String
+  createTabulation len = replicate len ' '
+
+  printMem :: Memory -> IO()
+  printMem (stack, symbols) = do
+    putStrLn "Stack:"
+    mapM_ (\(index, name) -> putStrLn $ "  " ++ show index ++ ". " ++ case name of
+      (String str) -> "String " ++ show str
+      (Integer int) -> "Integer " ++ show int) (zip [0..] stack)
+    
+    putStrLn "\nSymbols:"
+    mapM_ (\(index, (name, address)) -> do
+      putStrLn $ "  " ++ show index ++ ". Name: " ++ name
+      putStrLn $ "  " ++ (createTabulation . intLength $ index) ++ "  Address: " ++ show address
+      ) (zip [0..] symbols)
+
   -- Stack methods
   push :: Value -> State Memory ()
   push value = state \(stack, symbols) -> ((), (stack ++ [value], symbols))
@@ -24,6 +45,9 @@ module Types.Stack where
   clean :: State Memory ()
   clean = state \s -> ((), s)
 
+  stackLength :: State Memory Int
+  stackLength = state \(stack, symbols) -> ((length stack) - 1, (stack, symbols))
+
   -- Symbols methods
   register :: Symbol -> State Memory ()
   register sym@(name, _) = state \(stack, symbols) -> 
@@ -34,9 +58,11 @@ module Types.Stack where
     (getVariable symbols, (stack, removeVariable symbols))
     where getVariable = (!!0) . filter ((==name) . fst)
           removeVariable = filter ((/=name) . fst)
-  
-  stackLength :: State Memory Int
-  stackLength = state \(stack, symbols) -> ((length stack) - 1, (stack, symbols))
+
+  getVariable :: String -> State Memory Symbol
+  getVariable name = state \memory@(_, symbols) -> (let var = (find ((==name) . fst) symbols) in case var of
+    Nothing -> ("", -1)
+    (Just x) -> x, memory)
 
   -- Initializer functions
   emptyStack :: Stack
