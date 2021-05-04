@@ -1,5 +1,7 @@
+{-# LANGUAGE BlockArguments #-}
 module Types.Stack where
   import Types.Value
+  import Control.Monad.State
 
   type Stack = [Value]
 
@@ -10,24 +12,26 @@ module Types.Stack where
   type Memory = (Stack, Symbols)
   
   -- Stack methods
-  push :: Value -> Stack -> Stack
-  push value stack = stack ++ [value]
+  push :: Value -> State Memory ()
+  push value = state \(stack, symbols) -> ((), (stack ++ [value], symbols))
 
-  getLast :: Stack -> Value
-  getLast = last
+  pop :: State Memory Value
+  pop = state \(stack, symbols) -> (last stack, (init stack, symbols))
 
-  removeLast :: Stack -> Stack
-  removeLast = init
-
-  pop :: Stack -> (Value, Stack)
-  pop = (,) <$> getLast <*> removeLast
+  clean :: State Memory ()
+  clean = state \s -> ((), s)
 
   -- Symbols methods
-  register :: Symbol -> Symbols -> Symbols
-  register (name, address) symbols = symbols ++ [(name, address)]
+  register :: Symbol -> State Memory ()
+  register sym@(name, _) = state \(stack, symbols) -> 
+    ((), (stack, (filter ((/=name) . fst) symbols) ++ [sym]))
 
-  remove :: String -> Symbols -> Symbols
-  remove name = filter ((/=name) . fst)
+  remove :: String -> State Memory Symbol
+  remove name = state \(stack, symbols) -> 
+    (getVariable symbols, (stack, removeVariable symbols))
+    where getVariable = (!!0) . filter ((==name) . fst)
+          removeVariable = filter ((/=name) . fst)
+    
 
   -- Initializer functions
   emptyStack :: Stack
@@ -38,3 +42,4 @@ module Types.Stack where
 
   emptyMemory :: Memory
   emptyMemory = (emptyStack, emptySymbols)
+  
