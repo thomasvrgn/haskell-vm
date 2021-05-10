@@ -13,6 +13,7 @@ module Main where
   main = do
     content <- readFile "tests/Sample.hsc"
     let bytecode = parse content
-    let (ret, st) = runState (runBytecode bytecode) emptyMemory
-    printMem st
-    printBytecode bytecode
+    print $ map (\(t,s) -> (t, regroup s)) bytecode
+    -- let (ret, st) = runState (runBytecode bytecode) emptyMemory
+    -- printMem st
+    -- printBytecode bytecode
