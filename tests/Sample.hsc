@@ -10,3 +10,4 @@ main:
   PUSH 5
   PUSH 6
   CALL 2
+  PUSH "test t"
