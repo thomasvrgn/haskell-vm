@@ -8,6 +8,7 @@ module Types.Bytecode where
     = Push Value
     | Pop
     | Load Name
+    | LoadSection Name
     | Store Name
     | Call ArgsLength
     | Drop Name
