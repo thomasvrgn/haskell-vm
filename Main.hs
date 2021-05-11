@@ -2,6 +2,7 @@
 module Main where
   import Core.Interpreter
   import Core.Parser
+  import Core.Lexer
 
   import Types.Bytecode
   import Types.Stack
@@ -13,7 +14,7 @@ module Main where
   main = do
     content <- readFile "tests/Sample.hsc"
     let bytecode = parse content
-    print $ map (\(t,s) -> (t, regroup s)) bytecode
+    print $ bytecode
     -- let (ret, st) = runState (runBytecode bytecode) emptyMemory
     -- printMem st
     -- printBytecode bytecode
