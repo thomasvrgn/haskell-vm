@@ -26,7 +26,7 @@ module Core.Lexer where
   lexer str@(x:xs)
     | x == '"' = let (s1,s2) = string xs in ('"' : s1 ++ "\"") : lexer (drop 1 s2)
     | isDigit x = let (n1,n2) = number xs in (x : n1) : lexer n2
-    | isChar x = let (w1,w2) = word str in w1 : lexer w2
+    | isChar x = let (w1,w2) = word str in w1 : lexer w2
     | x == ' ' = lexer xs
     | otherwise = [x] : lexer xs
 
