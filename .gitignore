@@ -6,3 +6,5 @@
 # IDEs
 .idea
 .vscode
+.DS_Store
+dist-newstyle
