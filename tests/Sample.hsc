@@ -1,13 +1,7 @@
-add:
-  ADD
-  PUSH 5
-  ADD
-  STORE f
+@index 0
+@size  5
 
-main:
-  LOAD_SECTION add
-  LOAD f
-  PUSH 5
-  PUSH 6
-  CALL 2
-  PUSH "test t"
+PUSH 5
+PUSH 6
+ADD
+EXTERN 1
