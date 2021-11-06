@@ -1,24 +1,13 @@
-module Core.Parser where
-  import Types.Stack
+module Core.Analysis.Parser where
   import Types.Value
 
-  import Core.Lexer
+  import Core.Analysis.Lexer
   import Data.Char
   import Data.List
 
   startsWith :: Eq a => a -> [a] -> Bool
+  startsWith _ [] = False
   startsWith d (x:_) = d == x
-
-  data Bytecode
-    = Rule {
-        rule  :: String,
-        value :: Integer
-      }
-    | Instruction {
-        instruction :: String,
-        arguments   :: [Integer]
-      }
-    deriving Show
 
   split :: Char -> String -> [String]
   split _ [] = []
@@ -32,22 +21,32 @@ module Core.Parser where
   -- lines just split string over new lines
   -- this function is just splitting raw bytecode string into organized array of array of elements
 
-  line :: [String] -> Bytecode
-  line (instr:args) =
-    if startsWith '@' instr
-      then parseRule instr args
-      else parseInstruction instr args
+  parseArgs :: [String] -> [Value]
+  parseArgs = map parseArg
 
-  parseRule :: String -> [String] -> Bytecode
+  parseArg :: String -> Value
+  parseArg s = if startsWith '"' s
+    then String . tail . init $ s
+    else Integer . read $ s
+
+  line :: [String] -> Bytecode Value
+  line [] = Comment
+  line (instr : args)
+    | startsWith '@' instr = parseRule instr args
+    | not $ startsWith '#' instr = parseInstruction instr args
+    | otherwise = Comment
+
+  parseRule :: String -> [String] -> Bytecode a
+  parseRule _ [] = error "Rule cannot be without argument"
   parseRule instr (arg:_) = Rule {
     rule = drop 1 instr,
     value = read arg
   }
 
-  parseInstruction :: String -> [String] -> Bytecode
+  parseInstruction :: String -> [String] -> Bytecode Value
   parseInstruction instr args = Instruction {
     instruction = instr,
-    arguments = read <$> args
+    arguments = parseArgs args
   }
 
   parse = map line . format

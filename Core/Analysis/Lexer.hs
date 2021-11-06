@@ -1,4 +1,4 @@
-module Core.Lexer where
+module Core.Analysis.Lexer where
   import Data.Char
 
   type Span = (String, String)
