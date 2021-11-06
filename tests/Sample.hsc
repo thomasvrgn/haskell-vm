@@ -2,6 +2,6 @@
 @size  5
 
 PUSH 5
-PUSH 6
-ADD
+PUSH 3
 EXTERN 1
+EXTERN 0
