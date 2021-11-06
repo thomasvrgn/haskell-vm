@@ -1,22 +1,17 @@
-{-# LANGUAGE BlockArguments #-}
+{-# LANGUAGE BlockArguments, TypeApplications #-}
 module Main where
-  import Core.Interpreter
-  import Core.Parser
-  import Core.Lexer
+  import Core.Runtime.Interpreter
+  import Core.Analysis.Parser
+  import Core.Analysis.Lexer
 
-  import Types.Bytecode
-  import Types.Stack
   import Types.Value
 
   import Control.Monad.State
-  
+
   main :: IO()
   main = do
     content <- readFile "tests/Sample.hsc"
     let bytecode = parse content
-    let p = initProgram bytecode
-    (res, p) <- runStateT run p
-    print p
-    -- let (ret, st) = runState (runBytecode bytecode) emptyMemory
-    -- printMem st
-    -- printBytecode bytecode
+    let p = initProgram @Value bytecode
+    (res, p1) <- runStateT run p
+    print res
