@@ -28,11 +28,15 @@ executable haskell-vm
 
     -- Modules included in this executable, other than Main.
     other-modules:
-        Core.Interpreter
-        Core.Lexer
-        Core.Parser
-        Types.Bytecode
-        Types.Stack
+        Core.Runtime.Interpreter
+        Core.Runtime.VM
+
+        Core.Analysis.Lexer
+        Core.Analysis.Parser
+
+        Core.Error.Error
+        Core.Error.Types
+        
         Types.Value
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -40,4 +44,5 @@ executable haskell-vm
         base ^>=4.14.1.0
       , vector
       , mtl
+      , ansi-terminal
     default-language: Haskell2010
